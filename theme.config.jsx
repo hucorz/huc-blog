@@ -1,8 +1,6 @@
-import Cusdis from 'nextra-theme-blog/cusdis'
 
 /* eslint sort-keys: error */
 export default {
-  comments: <Cusdis />,
   components: {
     h1: ({ children }) => (
       <h1
@@ -10,15 +8,12 @@ export default {
           WebkitBackgroundClip: 'text',
           WebkitTextFillColor: 'transparent',
           backgroundClip: 'text',
-          backgroundImage: 'linear-gradient(90deg, #BBB, #FFF)'
+          backgroundImage: 'linear-gradient(90deg, #FFF, #FFF)'
         }}
       >
         {children}
       </h1>
     )
-  },
-  cusdis: {
-    appId: 'a2d11511-7012-4254-9483-cb49c8f4dfe8'
   },
   darkMode: true,
   dateFormatter: date => `Last updated at ${date.toDateString()}`,
@@ -30,7 +25,7 @@ export default {
       >
         CC BY-NC 4.0
       </abbr>{' '}
-      {new Date().getFullYear()} © Shu Ding.
+      {new Date().getFullYear()} © Chao Hui.
       <a href="/feed.xml">RSS</a>
       <style jsx>{`
         a {

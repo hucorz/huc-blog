@@ -1,7 +1,7 @@
 ---
 type: posts
-title: Random Thoughts
+title: Posts
 date: 2020-01-03
 ---
 
-# Random Thoughts
+# Posts
