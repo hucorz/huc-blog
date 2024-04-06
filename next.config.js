@@ -1,2 +1,13 @@
-const withNextra = require('nextra')('nextra-theme-blog', './theme.config.js')
-module.exports = withNextra()
+import nextra from 'nextra'
+
+const withNextra = nextra({
+  theme: 'nextra-theme-blog',
+  themeConfig: './theme.config.jsx',
+  defaultShowCopyCode: true,
+  readingTime: true
+})
+
+export default withNextra({
+  reactStrictMode: true,
+  cleanDistDir: true
+})

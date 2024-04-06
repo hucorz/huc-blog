@@ -1,7 +1,10 @@
-const { promises: fs } = require('fs')
-const path = require('path')
-const RSS = require('rss')
-const matter = require('gray-matter')
+import { promises as fs } from 'fs'
+import path from 'path'
+import RSS from 'rss';
+import matter from 'gray-matter';
+
+const __filename = new URL(import.meta.url).pathname;
+const __dirname = path.dirname(__filename);
 
 async function generate() {
   const feed = new RSS({

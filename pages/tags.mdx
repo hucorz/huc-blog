@@ -1,0 +1,16 @@
+---
+type: page
+title: Tags
+date: 2021-03-19
+---
+
+# Tags
+
+import { Cards, Card } from 'nextra/components'
+import tags from '../public/tags.json'
+
+<Cards>
+  {Object.keys(tags).map((tag) => (
+    <Card key={tag} title={tag} href={`/tags/${tag}`} />
+  ))}
+</Cards>
