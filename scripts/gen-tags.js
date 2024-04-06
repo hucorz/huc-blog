@@ -18,7 +18,7 @@ async function generate() {
       )
       const frontmatter = matter(content)
 
-      frontmatter.data.tag.split(', ').forEach((tag) => {
+      frontmatter.data.tag.split(',').forEach((tag) => {
         tag = tag.trim().toLowerCase()
         allTags[tag] = allTags[tag] ? allTags[tag] + 1 : 1
       })
