@@ -2,7 +2,7 @@
   "private": true,
   "license": "MIT",
   "scripts": {
-    "dev": "next",
+    "dev": "node ./scripts/gen-rss.js && node ./scripts/gen-tags.js && next",
     "build": "node ./scripts/gen-rss.js && node ./scripts/gen-tags.js && next build",
     "start": "next start"
   },

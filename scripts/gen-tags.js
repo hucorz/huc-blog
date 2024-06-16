@@ -18,8 +18,9 @@ async function generate() {
       )
       const frontmatter = matter(content)
 
+      if (frontmatter.data.draft) return
       frontmatter.data.tag.split(',').forEach((tag) => {
-        tag = tag.trim().toLowerCase()
+        tag = tag.trim()
         allTags[tag] = allTags[tag] ? allTags[tag] + 1 : 1
       })
     })
