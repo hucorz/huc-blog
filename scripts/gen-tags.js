@@ -1,20 +1,22 @@
 import { promises as fs } from 'fs'
 import path from 'path'
 import matter from 'gray-matter';
+import { fileURLToPath } from 'url';
 
-const __filename = new URL(import.meta.url).pathname;
+const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 
 async function generate() {
-  const posts = await fs.readdir(path.join(__dirname, '..', 'pages', 'posts'))
+  const postsDir = path.resolve(__dirname, '..', 'pages', 'posts');
+  const posts = await fs.readdir(postsDir)
   const allTags = {}
   await Promise.all(
     posts.map(async (name) => {
       if (name.startsWith('index.')) return
 
       const content = await fs.readFile(
-        path.join(__dirname, '..', 'pages', 'posts', name)
+        path.join(postsDir, name)
       )
       const frontmatter = matter(content)
 

@@ -11,5 +11,322 @@ draft: false
 
 [原文链接](https://learnopencv.com/fine-tuning-bert/)
 
+本篇文章使用 Hugging Face Transformers Fine-Tune BERT，获得一个能够对 Arxiv 文章摘要进行分类的模型，一共 11 个类别。
+
+本篇文章包含以下内容：
+
+- 安装依赖
+- 解释用来 Fine-Tune BERT 的数据集
+- 模型和训练
+- 模型测试和评估
+
+> 本文大部分用到的 api 在 `transformer` 的[官方文档](https://huggingface.co/docs/transformers/index)都有，这里仅转载一下主要的处理流程。
+>
+> 如果实践中数据集是没有 label 的，则需要使用无监督的方法，比如 Masked Language Modeling（MLM） 以及 Next Sentence Prediction（NSP）。
+>
+> 为了构造 MLM 和 NSP 的数据，可以使用 transformers 库中的 `DataCollatorForLanguageModeling` 和 `DataCollatorForNextSentencePrediction`。
+
+## Why Fine-Tuning BERT Matters?
+
+Fine-Tuning 的目的是为了让 BERT 从一个通用的工具变成一个特定任务的工具。
+
+## Hugging Face Transformers
+
+本文章使用 Hugging Face Transformers，一个用于自然语言处理的库。
+
+## Fine-Tuning BERT on the Arxiv Abstract Classification Dataset
+
+首先，我们需要安装一些依赖。
+
+```cmd
+!pip install -U transformers datasets evaluate accelerate
+!pip install scikit-learn
+!pip install tensorboard
+```
+
+### Importing the Necessary Libraries
+
+```python showLineNumbers
+from datasets import load_dataset
+from transformers import (
+    AutoTokenizer,
+    DataCollatorWithPadding,
+    AutoModelForSequenceClassification,
+    TrainingArguments,
+    Trainer,
+    pipeline,
+)
+ 
+import evaluate
+import glob
+import numpy as np
+```
+
+### Setting the Hyperparameters for Fine-Tuning BERT
+
+```python showLineNumbers
+BATCH_SIZE = 32
+NUM_PROCS = 32
+LR = 0.00005
+EPOCHS = 5
+MODEL = 'bert-base-uncased'
+OUT_DIR = 'arxiv_bert'
+```
+- MODEL：表示我们要使用的模型，这里使用的是 `bert-base-uncased`。这里的 `uncased` 表示该模型是在小写的文本上训练的。
+- OUT_DIR：表示我们训练好的模型的保存路径。
+
+### Download and Prepare the Dataset
+
+使用 `datasets` 库下载数据集 arxiv 的分类数据集。
+
+```python showLineNumbers
+train_dataset = load_dataset("ccdv/arxiv-classification", split='train')
+valid_dataset = load_dataset("ccdv/arxiv-classification", split='validation')
+test_dataset = load_dataset("ccdv/arxiv-classification", split='test')
+print(train_dataset)
+print(valid_dataset)
+print(test_dataset)
+```
+
+> 下载数据可能需要为 load_dataset 加一个 trust_remote_code=True 的参数。
+
+```cmd filename="output"
+Dataset({
+    features: ['text', 'label'],
+    num_rows: 28388
+})
+Dataset({
+    features: ['text', 'label'],
+    num_rows: 2500
+})
+Dataset({
+    features: ['text', 'label'],
+    num_rows: 2500
+})
+```
+
+查看一下 dataset 的格式，可以看到每个样本有两个字段，一个是 text，一个是 label。
+
+```python
+train_dataset[0]
+```
+
+```python filename="output"
+{'text': 'Constrained Submodular Maximization ... and A.14.\n\n22\n\n\x0c',
+ 'label': 8}
+```
+
+### Dataset Label Information
+
+定义两个字典，用来将 label 转换为对应的类别，以及将类别转换为对应的 label。
+
+```python showLineNumbers
+id2label = {
+    0: "math.AC",
+    1: "cs.CV",
+    2: "cs.AI",
+    3: "cs.SY",
+    4: "math.GR",
+    5: "cs.CE",
+    6: "cs.PL",
+    7: "cs.IT",
+    8: "cs.DS",
+    9: "cs.NE",
+    10: "math.ST"
+}
+label2id = {
+    "math.AC": 0,
+    "cs.CV": 1,
+    "cs.AI": 2,
+    "cs.SY": 3,
+    "math.GR": 4,
+    "cs.CE": 5,
+    "cs.PL": 6,
+    "cs.IT": 7,
+    "cs.DS": 8,
+    "cs.NE": 9,
+    "math.ST": 10
+}
+```
+
+### Tokenizing the Dataset
+
+使用 `AutoTokenizer` 实例化一个 tokenizer，并对不同的 dataset 进行 tokenization。
+
+```python showLineNumbers
+from functools import partial
+
+tokenizer = AutoTokenizer.from_pretrained(MODEL)
+
+def preprocess_function(tokenizer, examples):
+    return tokenizer(
+        examples["text"],
+        truncation=True,
+    )
+
+partial_tokenize_function = partial(preprocess_function, tokenizer)
+
+tokenized_train = train_dataset.map(
+    partial_tokenize_function,
+    batched=True,
+    batch_size=BATCH_SIZE,
+    num_proc=NUM_PROCS
+)
+ 
+tokenized_valid = valid_dataset.map(
+    partial_tokenize_function,
+    batched=True,
+    batch_size=BATCH_SIZE,
+    num_proc=NUM_PROCS
+)
+ 
+tokenized_test = test_dataset.map(
+    partial_tokenize_function,
+    batched=True,
+    batch_size=BATCH_SIZE,
+    num_proc=NUM_PROCS
+)
+
+    
+data_collator = DataCollatorWithPadding(tokenizer=tokenizer)
+```
+
+给 `AutoTokenizer` 传递的模型名能够初始化专门针对该模型的 tokenizer。
+
+`DataCollatorWithPadding` 会在训练时动态地将不同长度的 token 转换为相同长度的 tensor。
+
+> Transformers 的 `Tokenizer` 支持 truncation 和 padding 参数，具体查看 [transformers.PreTrainedTokenizer](https://huggingface.co/docs/transformers/v4.41.3/en/main_classes/tokenizer#transformers.PreTrainedTokenizer)
+>
+> tokenizer 和 DataCollatorWithPadding 的 padding 之间的区别：
+> - tokenizer 的 padding 是在 tokenization 时使用，用来将不同长度的文本转换为相同长度的 token。
+> - DataCollatorWithPadding 的 padding 是在 batch 生成时动态地来将不同长度的 token 转换为相同长度的 tensor。
+>
+> DataCollatorWithPadding 传入 tokenizer 需要利用 tokenzier 的信息进行正确地 padding 
+> 
+> 使用原文中的代码我遇到了一个 Tokenizer is not defined 的报错，按照 [这里](https://discuss.huggingface.co/t/tokenizer-is-not-defined/39231) 的解决方法，用 partial 函数解决了这个问题。
+
+
+### Sample Tokenization Example
+
+```python
+tokenized_sample = partial_tokenize_function(train_dataset[0])
+print(tokenized_sample)
+print(f"Length of tokenized IDs: {len(tokenized_sample.input_ids)}")
+print(f"Length of attention mask: {len(tokenized_sample.attention_mask)}")
+```
+
+```python filename="output"
+{'input_ids': [101, 14924, 2635, 24421, 13997... 102], 
+'token_type_ids': [0, 0, 0, 0, ... 0],
+'attention_mask': [1, 1, 1, ... 1]}
+Length of tokenized IDs: 512
+Length of attention mask: 512
+```
+
+- input_ids：表示 tokenized 后的文本，每个 token 都有一个对应的 id。例如，101 表示 [CLS]，表示序列的开始；102 表示 [SEP]，表示序列的结束。
+- token_type_ids：表示 token 的类型，BERT 用于区分两个句子的 token。
+- attention_mask：表示哪些 token 是 padding 的，哪些是真实的 token。
+
+### Evaluation Metrics
+
+定义一个函数，用来计算模型的评估指标。
+
+```python showLineNumbers
+accuracy = evaluate.load('accuracy')
+def compute_metrics(eval_pred):
+    predictions, labels = eval_pred
+    predictions = np.argmax(predictions, axis=1)
+    return accuracy.compute(predictions=predictions, references=labels)
+```
+
+### Preparing the BERT Model
+
+实例化一个 11 分类的 BERT 模型，最后的 BERT 模型有 1.09 亿参数。
+
+```python showLineNumbers
+model = AutoModelForSequenceClassification.from_pretrained(
+    MODEL,
+    num_labels=11,
+    id2label=id2label,
+    label2id=label2id,
+)
+```
+
+- num_labels：表示分类任务中的类别数。transformers 在加载预训练模型的权重时，会根据 num_labels 的值重新初始化模型的最后一个分类层，从而忽略与预训练模型不匹配的维度。这意味着当你指定 num_labels 后，模型的最后一个分类层会根据新的类别数进行初始化，而其他层的权重会从预训练模型中加载。
+
+```python filename="output"
+Some weights of BertForSequenceClassification were not initialized from the model checkpoint at bert-base-uncased and are newly initialized: ['classifier.bias', 'classifier.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+```
+
+### Training Arguments
+
+定义训练参数，都是一些比较常见的参数。
+
+```python showLineNumbers
+training_args = TrainingArguments(
+    output_dir=OUT_DIR,
+    learning_rate=LR,
+    per_device_train_batch_size=BATCH_SIZE,
+    per_device_eval_batch_size=BATCH_SIZE,
+    num_train_epochs=EPOCHS,
+    weight_decay=0.01,
+    eval_strategy="epoch",
+    save_strategy="epoch",
+    load_best_model_at_end=True,
+    save_total_limit=3,
+    report_to='tensorboard',
+    fp16=True
+)
+```
+
+### Initializing the Trainer
+
+实例化一个 `Trainer`，并开始训练。
+
+```python showLineNumbers
+trainer = Trainer(
+    model=model,
+    args=training_args,
+    train_dataset=tokenized_train,
+    eval_dataset=tokenized_valid,
+    data_collator=data_collator,
+    tokenizer=tokenizer,
+    compute_metrics=compute_metrics
+)
+
+history = trainer.train()
+```
+
+> 写的时候在自己电脑上跑的，跑太慢了，就没继续跑下去了，但是这个代码是可以正常运行的。
+
+
+### Evaluation && Inference on Unseen Data
+
+```python showLineNumbers
+	
+trainer.evaluate(tokenized_test)
+
+AutoModelForSequenceClassification.from_pretrained(f"arxiv_bert/checkpoint-4440")
+ 
+tokenizer = AutoTokenizer.from_pretrained('bert-base-uncased')
+classify = pipeline(task='text-classification', model=model, tokenizer=tokenizer)
+ 
+all_files = glob.glob('inference_data/*')
+for file_name in all_files:
+    file = open(file_name)
+    content = file.read()
+    print(content)
+    result = classify(content)
+    print('PRED: ', result)
+    print('GT: ', file_name.split('_')[-1].split('.txt')[0])
+    print('\n')
+```
+
+
+
+
+
+
 
 
