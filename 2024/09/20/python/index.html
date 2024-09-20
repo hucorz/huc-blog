@@ -15,7 +15,7 @@
 
 
 
-<title>tag | Huc&#39;s Blog</title>
+<title>Python 常见问题与总结 | Huc&#39;s Blog</title>
 
 
 
@@ -194,7 +194,7 @@
         </h2>
       </a>
       <div id="header-title" class="opacity-0 md:ml-2 md:mt-[0.1rem] text-xs font-medium whitespace-nowrap overflow-hidden overflow-ellipsis">
-        tag
+        Python 常见问题与总结
       </div>
       <div class="flex-1"></div>
       <div class="flex items-center gap-3">
@@ -246,39 +246,186 @@
 </div>
 
   <main class="pt-14">
+    <!-- css -->
+
+<link rel="stylesheet" href="/lib/fancybox/fancybox.min.css">
+
+
+<link rel="stylesheet" href="/lib/tocbot/tocbot.min.css">
+
+<!-- toc -->
+
+  <!-- tocbot -->
+<nav class="post-toc toc text-sm w-48 relative top-32 right-0 opacity-70 hidden lg:block" style="position: fixed !important;"></nav>
+
+
+<section class="px-6 max-w-prose mx-auto md:px-0">
+  <!-- header -->
+  <header class="overflow-hidden pt-6 pb-6 md:pt-12">
+    <div class="pt-4 md:pt-6">
+      <h1 id="article-title" class="text-[2rem] font-bold leading-snug mb-4 md:mb-6 md:text-[2.6rem]">
+        Python 常见问题与总结
+      </h1>
+      <!-- tag -->
+      <div class="pb-6">
+        
+          
+            <span class="bg-gray-100 dark:bg-gray-700 px-2 py-1 m-1 text-sm rounded-md transition-colors hover:bg-gray-200">
+              <a href="/tag/python/">python</a>
+            </span>
+          
+        
+      </div>
+      <div>
+        <section class="flex items-center gap-3 text-sm">
+          <span class="flex items-center gap-1">
+            <iconify-icon width="18" icon="carbon-calendar" ></iconify-icon>
+            <time>2024-09-20</time>
+          </span>
+          <span class="text-gray-400">·</span>
+          <span class="flex items-center gap-1">
+            <iconify-icon width="18" icon="ic:round-access-alarm" ></iconify-icon>
+            <span>1 min</span>
+          </span>
+          <span class="text-gray-400">·</span>
+          <span class="flex items-center gap-1">
+            <iconify-icon width="18" icon="icon-park-outline:font-search" ></iconify-icon>
+            <span>203 words</span>
+          </span>
+          
+        </section>
+      </div>
+    </div>
+  </header>
+  <!-- content -->
+  <article class="post-content prose m-auto slide-enter-content dark:prose-invert">
+    <h1 id="Python-常见问题与总结"><a href="#Python-常见问题与总结" class="headerlink" title="Python 常见问题与总结"></a>Python 常见问题与总结</h1><h2 id="python-运行脚本与运行模块"><a href="#python-运行脚本与运行模块" class="headerlink" title="python 运行脚本与运行模块"></a>python 运行脚本与运行模块</h2><p>在如下的场景，工作目录为 root，<code>python src/script.py</code> 和 <code>python -m src.script</code> 有什么区别？这两种情况下如何 <code>import</code> 其他模块。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">root/</span><br><span class="line">├── src/</span><br><span class="line">│   ├── script.py</span><br><span class="line">│   ├── utils.py</span><br><span class="line">├── helpers/</span><br><span class="line">│   └── submodule.py</span><br></pre></td></tr></table></figure>
+
+<p>一些直接的结论有：</p>
+<ul>
+<li>运行脚本会把脚本所在目录（上述场景中的src）添加到 <code>sys.path[0]</code>，运行模块都会将工作目录（对应上述场景的root）添加到 <code>sys.path[0]</code> </li>
+<li>import 的模块必须在 <code>sys.path</code> 中，而 <code>sys.path</code> 是由 <code>sys.path[0]</code> 和 <code>PYTHONPATH</code> 等决定的</li>
+<li>运行模块时会有包的上下文，而相对导入必须在包的上下文中进行（如 from .utils import some_function），且相对导入必须使用 from … import … 的形式，不能使用 import … 的形式</li>
+</ul>
+
+  </article>
+  <!-- prev and next -->
+  <div class="flex justify-between mt-12 pt-6 border-t border-gray-200">
+    <div>
+      
+    </div>
+    <div>
+      
+        <a href="/2024/08/31/Hexo-Vercel-Blog/" class="text-sm text-gray-400 hover:text-gray-500 flex justify-center">
+          Hexo + Vercel 搭建个人博客
+          <iconify-icon width="20" icon="ri:arrow-right-s-line" data-inline="false"></iconify-icon>
+        </a>
+      
+    </div>
+  </div>
+  <!-- comment -->
+  <div class="article-comments mt-12">
     
 
-  <div class="px-6 max-w-prose mx-auto md:px-0 mt-6">
-    <h2 class="font-bold text-2xl">Tags</h2>
-    <ul class="mt2">
-      
-        <li class="mt-2">
-          <a href="/tag/nlp/">nlp</a>
-          <span >(1)</span>
-        </li>
-      
-        <li class="mt-2">
-          <a href="/tag/%E8%BD%AC%E8%BD%BD/">转载</a>
-          <span >(1)</span>
-        </li>
-      
-        <li class="mt-2">
-          <a href="/tag/others/">others</a>
-          <span >(1)</span>
-        </li>
-      
-        <li class="mt-2">
-          <a href="/tag/test/">test</a>
-          <span >(1)</span>
-        </li>
-      
-        <li class="mt-2">
-          <a href="/tag/python/">python</a>
-          <span >(1)</span>
-        </li>
-      
-    </ul>
   </div>
+</section>
+<!-- js inspect -->
+
+<script src="/lib/clipboard.min.js"></script>
+
+
+<script async src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    "HTML-CSS": {
+        preferredFont: "TeX",
+        availableFonts: ["STIX","TeX"],
+        linebreaks: { automatic:true },
+        EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50)
+    },
+    tex2jax: {
+        inlineMath: [ ["$", "$"], ["\\(","\\)"] ],
+        processEscapes: true,
+        ignoreClass: "tex2jax_ignore|dno",
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+        equationNumbers: { autoNumber: "AMS" },
+        noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } },
+        Macros: { href: "{}" }
+    },
+    messageStyle: "none"
+  });
+</script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+      var all = MathJax.Hub.getAllJax(), i;
+      for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+      }
+  });
+</script>
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+<script>
+  $(document).ready(() => {
+    const maraidConfig = {
+      theme: "default",
+      logLevel: 3,
+      flowchart: { curve: "linear" },
+      gantt: { axisFormat: "%m/%d/%Y" },
+      sequence: { actorMargin: 50 },
+    };
+    mermaid.initialize(maraidConfig);
+  });
+</script>
+
+
+
+<script src="/lib/fancybox/fancybox.umd.min.js"></script>
+
+<script>
+  $(document).ready(() => {
+    $('.post-content').each(function(i){
+      $(this).find('img').each(function(){
+        if ($(this).parent().hasClass('fancybox') || $(this).parent().is('a')) return;
+        var alt = this.alt;
+        if (alt) $(this).after('<span class="fancybox-alt">' + alt + '</span>');
+        $(this).wrap('<a class="fancybox-img" href="' + this.src + '" data-fancybox=\"gallery\" data-caption="' + alt + '"></a>')
+      });
+      $(this).find('.fancybox').each(function(){
+        $(this).attr('rel', 'article' + i);
+      });
+    });
+
+    Fancybox.bind('[data-fancybox="gallery"]', {
+        // options
+    })
+  })
+</script>
+
+<!-- tocbot begin -->
+
+<script src="/lib/tocbot/tocbot.min.js"></script>
+
+<script>
+  $(document).ready(() => {
+      tocbot.init({
+        // Where to render the table of contents.
+        tocSelector: '.post-toc',
+        // Where to grab the headings to build the table of contents.
+        contentSelector: '.post-content',
+        // Which headings to grab inside of the contentSelector element.
+        headingSelector: 'h1, h2, h3',
+        // For headings inside relative or absolute positioned containers within content.
+        hasInnerContainers: true,
+    });
+  })
+</script>
+<!-- tocbot end -->
 
 
   </main>

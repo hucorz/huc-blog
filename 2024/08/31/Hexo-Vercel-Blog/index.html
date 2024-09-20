@@ -290,7 +290,7 @@
           <span class="text-gray-400">·</span>
           <span class="flex items-center gap-1">
             <iconify-icon width="18" icon="icon-park-outline:font-search" ></iconify-icon>
-            <span>530 words</span>
+            <span>524 words</span>
           </span>
           
         </section>
@@ -323,7 +323,7 @@
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install hexo-deployer-git --save</span><br></pre></td></tr></table></figure>
 
 <p>将生成的静态文件上传到 github：</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo clean &amp;&amp; hexo g &amp;&amp; hexo d</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">hexo clean</span><br><span class="line">hexo generate</span><br><span class="line">hexo deploy</span><br></pre></td></tr></table></figure>
 
 <p>然后在 vercel 中导入项目，选择 github 仓库，Framework Preset 选择 <code>Others</code>，部署命令空着即可，因为 hexo 生成的静态文件已经上传到 github 了，然后点击 Deploy 即可。</p>
 <h2 id="添加额外功能"><a href="#添加额外功能" class="headerlink" title="添加额外功能"></a>添加额外功能</h2><h3 id="RSS"><a href="#RSS" class="headerlink" title="RSS"></a>RSS</h3><p>安装 hexo-generator-feed 插件：</p>
@@ -346,6 +346,11 @@
   <!-- prev and next -->
   <div class="flex justify-between mt-12 pt-6 border-t border-gray-200">
     <div>
+      
+        <a href="/2024/09/20/python/" class="text-sm text-gray-400 hover:text-gray-500 flex justify-center">
+          <iconify-icon width="20" icon="ri:arrow-left-s-line" data-inline="false"></iconify-icon>
+          Python 常见问题与总结
+        </a>
       
     </div>
     <div>
