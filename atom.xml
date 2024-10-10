@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2024-09-20T12:01:19.289Z</updated>
+  <updated>2024-10-10T03:21:18.710Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -15,6 +15,28 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>tmux</title>
+    <link href="http://example.com/2024/10/10/tmux/"/>
+    <id>http://example.com/2024/10/10/tmux/</id>
+    <published>2024-10-09T16:00:00.000Z</published>
+    <updated>2024-10-10T03:21:18.710Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="tmux"><a href="#tmux" class="headerlink" title="tmux"></a>tmux</h1><h2 id="在后台保存会话状态"><a href="#在后台保存会话状态" class="headerlink" title="在后台保存会话状态"></a>在后台保存会话状态</h2><p>使用场景：做实验时会有比较麻烦的环境配置和启动，或者每次都需要重新启动一些服务，每次登陆服务器这些步骤都需要重新做一遍很麻烦。</p><p>可以使用 tmux 在断开服务器前将会话保存在后台，下次登陆时再重连这个 tmux 会话。</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">新建一个 tmux session</span></span><br><span class="line">tmux </span><br><span class="line">tmux new -s mysession # 自定义session名称</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">分离 tmux session，后台运行</span></span><br><span class="line">Ctrl + b, 然后按 d</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">查看已存在的 tmux 会话</span></span><br><span class="line">tmux ls</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">重新连接到一个 tmux 会话</span></span><br><span class="line">tmux attach-session -t 0</span><br><span class="line">tmux attach-session -t mysession</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">关闭 tmux session</span> </span><br><span class="line">tmux kill-session -t mysession</span><br></pre></td></tr></table></figure>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h1 id=&quot;tmux&quot;&gt;&lt;a href=&quot;#tmux&quot; class=&quot;headerlink&quot; title=&quot;tmux&quot;&gt;&lt;/a&gt;tmux&lt;/h1&gt;&lt;h2 id=&quot;在后台保存会话状态&quot;&gt;&lt;a href=&quot;#在后台保存会话状态&quot; class=&quot;headerlink&quot; title=</summary>
+      
+    
+    
+    
+    
+    <category term="devtools" scheme="http://example.com/tag/devtools/"/>
+    
+  </entry>
   
   <entry>
     <title>Python 常见问题与总结</title>

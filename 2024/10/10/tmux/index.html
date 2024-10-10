@@ -15,7 +15,7 @@
 
 
 
-<title>Python 常见问题与总结 | Huc&#39;s Blog</title>
+<title>tmux | Huc&#39;s Blog</title>
 
 
 
@@ -194,7 +194,7 @@
         </h2>
       </a>
       <div id="header-title" class="opacity-0 md:ml-2 md:mt-[0.1rem] text-xs font-medium whitespace-nowrap overflow-hidden overflow-ellipsis">
-        Python 常见问题与总结
+        tmux
       </div>
       <div class="flex-1"></div>
       <div class="flex items-center gap-3">
@@ -264,14 +264,14 @@
   <header class="overflow-hidden pt-6 pb-6 md:pt-12">
     <div class="pt-4 md:pt-6">
       <h1 id="article-title" class="text-[2rem] font-bold leading-snug mb-4 md:mb-6 md:text-[2.6rem]">
-        Python 常见问题与总结
+        tmux
       </h1>
       <!-- tag -->
       <div class="pb-6">
         
           
             <span class="bg-gray-100 dark:bg-gray-700 px-2 py-1 m-1 text-sm rounded-md transition-colors hover:bg-gray-200">
-              <a href="/tag/python/">python</a>
+              <a href="/tag/devtools/">devtools</a>
             </span>
           
         
@@ -280,7 +280,7 @@
         <section class="flex items-center gap-3 text-sm">
           <span class="flex items-center gap-1">
             <iconify-icon width="18" icon="carbon-calendar" ></iconify-icon>
-            <time>2024-09-20</time>
+            <time>2024-10-10</time>
           </span>
           <span class="text-gray-400">·</span>
           <span class="flex items-center gap-1">
@@ -290,7 +290,7 @@
           <span class="text-gray-400">·</span>
           <span class="flex items-center gap-1">
             <iconify-icon width="18" icon="icon-park-outline:font-search" ></iconify-icon>
-            <span>203 words</span>
+            <span>172 words</span>
           </span>
           
         </section>
@@ -299,31 +299,19 @@
   </header>
   <!-- content -->
   <article class="post-content prose m-auto slide-enter-content dark:prose-invert">
-    <h1 id="Python-常见问题与总结"><a href="#Python-常见问题与总结" class="headerlink" title="Python 常见问题与总结"></a>Python 常见问题与总结</h1><h2 id="python-运行脚本与运行模块"><a href="#python-运行脚本与运行模块" class="headerlink" title="python 运行脚本与运行模块"></a>python 运行脚本与运行模块</h2><p>在如下的场景，工作目录为 root，<code>python src/script.py</code> 和 <code>python -m src.script</code> 有什么区别？这两种情况下如何 <code>import</code> 其他模块。</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">root/</span><br><span class="line">├── src/</span><br><span class="line">│   ├── script.py</span><br><span class="line">│   ├── utils.py</span><br><span class="line">├── helpers/</span><br><span class="line">│   └── submodule.py</span><br></pre></td></tr></table></figure>
-
-<p>一些直接的结论有：</p>
-<ul>
-<li>运行脚本会把脚本所在目录（上述场景中的src）添加到 <code>sys.path[0]</code>，运行模块都会将工作目录（对应上述场景的root）添加到 <code>sys.path[0]</code> </li>
-<li>import 的模块必须在 <code>sys.path</code> 中，而 <code>sys.path</code> 是由 <code>sys.path[0]</code> 和 <code>PYTHONPATH</code> 等决定的</li>
-<li>运行模块时会有包的上下文，而相对导入必须在包的上下文中进行（如 from .utils import some_function），且相对导入必须使用 from … import … 的形式，不能使用 import … 的形式</li>
-</ul>
-
+    <h1 id="tmux"><a href="#tmux" class="headerlink" title="tmux"></a>tmux</h1><h2 id="在后台保存会话状态"><a href="#在后台保存会话状态" class="headerlink" title="在后台保存会话状态"></a>在后台保存会话状态</h2><p>使用场景：做实验时会有比较麻烦的环境配置和启动，或者每次都需要重新启动一些服务，每次登陆服务器这些步骤都需要重新做一遍很麻烦。</p>
+<p>可以使用 tmux 在断开服务器前将会话保存在后台，下次登陆时再重连这个 tmux 会话。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">新建一个 tmux session</span></span><br><span class="line">tmux </span><br><span class="line">tmux new -s mysession # 自定义session名称</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">分离 tmux session，后台运行</span></span><br><span class="line">Ctrl + b, 然后按 d</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">查看已存在的 tmux 会话</span></span><br><span class="line">tmux ls</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">重新连接到一个 tmux 会话</span></span><br><span class="line">tmux attach-session -t 0</span><br><span class="line">tmux attach-session -t mysession</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">关闭 tmux session</span> </span><br><span class="line">tmux kill-session -t mysession</span><br></pre></td></tr></table></figure>
   </article>
   <!-- prev and next -->
   <div class="flex justify-between mt-12 pt-6 border-t border-gray-200">
     <div>
       
-        <a href="/2024/10/10/tmux/" class="text-sm text-gray-400 hover:text-gray-500 flex justify-center">
-          <iconify-icon width="20" icon="ri:arrow-left-s-line" data-inline="false"></iconify-icon>
-          tmux
-        </a>
-      
     </div>
     <div>
       
-        <a href="/2024/08/31/Hexo-Vercel-Blog/" class="text-sm text-gray-400 hover:text-gray-500 flex justify-center">
-          Hexo + Vercel 搭建个人博客
+        <a href="/2024/09/20/python/" class="text-sm text-gray-400 hover:text-gray-500 flex justify-center">
+          Python 常见问题与总结
           <iconify-icon width="20" icon="ri:arrow-right-s-line" data-inline="false"></iconify-icon>
         </a>
       
