@@ -34,6 +34,7 @@ const months = [
 <Layout title={`Archives | ${SITE.title}`}>
   <Header />
   <Main pageTitle="Archives" pageDesc="All the articles I've archived.">
+    {posts.length === 0 && <p>No archived posts are published yet.</p>}
     {
       Object.entries(
         getPostsByGroupCondition(posts, post =>

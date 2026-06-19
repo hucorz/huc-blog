@@ -10,6 +10,8 @@ html[data-theme="light"] {
   --accent: #006cac;
   --muted: #e6e6e6;
   --border: #ece9e9;
+  --nav-link: #8e8e8e;
+  --nav-link-active: #323232;
 }
 
 html[data-theme="dark"] {
@@ -18,6 +20,8 @@ html[data-theme="dark"] {
   --accent: #ff6b01;
   --muted: #343f60;
   --border: #ab4b08;
+  --nav-link: #6b6a71;
+  --nav-link-active: #d6d5dc;
 }
 
 @theme inline {
@@ -59,8 +63,19 @@ html[data-theme="dark"] {
   @apply mx-auto w-full max-w-app px-4;
 }
 
+.nav-link {
+  color: var(--nav-link);
+  transition: color 160ms ease;
+}
+
+.nav-link:hover,
+.nav-link:focus-visible,
 .active-nav {
-  @apply underline decoration-wavy decoration-2 underline-offset-8;
+  color: var(--nav-link-active);
+}
+
+.active-nav {
+  text-decoration: none;
 }
 
 /* Source: https://piccalil.li/blog/a-more-modern-css-reset/ */

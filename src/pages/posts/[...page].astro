@@ -1,6 +1,8 @@
 ---
 import type { GetStaticPaths } from "astro";
+import type { Page } from "astro";
 import { getCollection } from "astro:content";
+import type { CollectionEntry } from "astro:content";
 import Main from "@/layouts/Main.astro";
 import Layout from "@/layouts/Layout.astro";
 import Header from "@/components/Header.astro";
@@ -12,6 +14,28 @@ import { SITE } from "@/config";
 
 export const getStaticPaths = (async ({ paginate }) => {
   const posts = await getCollection("blog", ({ data }) => !data.draft);
+
+  if (posts.length === 0) {
+    const emptyPage = {
+      data: [],
+      start: 0,
+      end: 0,
+      size: SITE.postPerPage,
+      total: 0,
+      currentPage: 1,
+      lastPage: 1,
+      url: {
+        current: "/posts/",
+        prev: undefined,
+        next: undefined,
+        first: "/posts/",
+        last: "/posts/",
+      },
+    } satisfies Page<CollectionEntry<"blog">>;
+
+    return [{ params: { page: undefined }, props: { page: emptyPage } }];
+  }
+
   return paginate(getSortedPosts(posts), { pageSize: SITE.postPerPage });
 }) satisfies GetStaticPaths;
 
@@ -20,10 +44,18 @@ const { page } = Astro.props;
 
 <Layout title={`Posts | ${SITE.title}`}>
   <Header />
-  <Main pageTitle="Posts" pageDesc="All the articles I've posted.">
-    <ul>
-      {page.data.map(data => <Card {...data} />)}
-    </ul>
+  <Main pageTitle="Posts" pageDesc="Published posts from this blog.">
+    {
+      page.data.length > 0 ? (
+        <ul>
+          {page.data.map(data => (
+            <Card {...data} />
+          ))}
+        </ul>
+      ) : (
+        <p>No posts are published yet.</p>
+      )
+    }
   </Main>
 
   <Pagination {page} />

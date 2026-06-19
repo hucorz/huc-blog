@@ -3,6 +3,7 @@ import type { CollectionEntry } from "astro:content";
 import { slugifyStr } from "@/utils/slugify";
 import { getPath } from "@/utils/getPath";
 import Datetime from "./Datetime.astro";
+import PostCover from "./PostCover.astro";
 
 type Props = {
   variant?: "h2" | "h3";
@@ -10,24 +11,53 @@ type Props = {
 
 const { variant: Heading = "h2", id, data, filePath } = Astro.props;
 
-const { title, description, ...props } = data;
+const { title, description, coverImage, ...props } = data;
+const postPath = getPath(id, filePath);
 ---
 
 <li class="my-6">
-  <a
-    href={getPath(id, filePath)}
+  <div
     class:list={[
-      "inline-block text-lg font-medium text-accent",
-      "decoration-dashed underline-offset-4 hover:underline",
-      "focus-visible:no-underline focus-visible:underline-offset-0",
+      {
+        "sm:grid sm:grid-cols-[minmax(0,1fr)_13rem] sm:items-start sm:gap-6":
+          coverImage,
+      },
     ]}
   >
-    <Heading
-      style={{ viewTransitionName: slugifyStr(title.replaceAll(".", "-")) }}
-    >
-      {title}
-    </Heading>
-  </a>
-  <Datetime {...props} />
-  <p>{description}</p>
+    <div class="min-w-0">
+      <a
+        href={postPath}
+        class:list={[
+          "inline-block text-lg font-medium text-accent",
+          "decoration-dashed underline-offset-4 hover:underline",
+          "focus-visible:no-underline focus-visible:underline-offset-0",
+        ]}
+      >
+        <Heading
+          style={{ viewTransitionName: slugifyStr(title.replaceAll(".", "-")) }}
+        >
+          {title}
+        </Heading>
+      </a>
+      <Datetime {...props} />
+      <p>{description}</p>
+    </div>
+
+    {
+      coverImage && (
+        <a
+          href={postPath}
+          class="mt-4 block overflow-hidden rounded-xl border border-border/80 bg-muted sm:mt-1"
+          aria-label={`Open ${title}`}
+        >
+          <PostCover
+            src={coverImage}
+            alt={`${title} cover image`}
+            sizes="(min-width: 640px) 13rem, 100vw"
+            class="aspect-[4/3] w-full object-cover"
+          />
+        </a>
+      )
+    }
+  </div>
 </li>

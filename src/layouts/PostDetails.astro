@@ -9,6 +9,7 @@ import EditPost from "@/components/EditPost.astro";
 import ShareLinks from "@/components/ShareLinks.astro";
 import BackButton from "@/components/BackButton.astro";
 import BackToTopButton from "@/components/BackToTopButton.astro";
+import PostCover from "@/components/PostCover.astro";
 import { getPath } from "@/utils/getPath";
 import { slugifyStr } from "@/utils/slugify";
 import IconChevronLeft from "@/assets/icons/IconChevronLeft.svg";
@@ -25,6 +26,7 @@ const { post, posts } = Astro.props;
 const {
   title,
   author,
+  coverImage,
   description,
   ogImage: initOgImage,
   canonicalURL,
@@ -107,6 +109,19 @@ const nextPost =
       >
       <EditPost {hideEditPost} {post} class="max-sm:hidden" />
     </div>
+    {
+      coverImage && (
+        <div class="mt-6 overflow-hidden rounded-2xl border border-border/80 bg-muted">
+          <PostCover
+            src={coverImage}
+            alt={`${title} cover image`}
+            loading="eager"
+            sizes="(min-width: 1024px) 768px, 100vw"
+            class="aspect-[16/9] w-full object-cover"
+          />
+        </div>
+      )
+    }
     <article
       id="article"
       class="app-prose mt-8 w-full max-w-app prose-pre:bg-(--shiki-light-bg) dark:prose-pre:bg-(--shiki-dark-bg)"
