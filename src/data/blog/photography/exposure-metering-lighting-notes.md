@@ -5,10 +5,10 @@ pubDatetime: 2025-05-29
 featured: false
 draft: false
 tags:
-  - Photography
-  - Exposure
-  - Metering
-  - Lighting
+  - 摄影
+  - 曝光
+  - 测光
+  - 用光
 description: 曝光、测光、对焦、白平衡、闪光灯、器材与基础用光的整理笔记。
 ---
 

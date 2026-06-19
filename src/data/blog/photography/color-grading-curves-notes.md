@@ -5,10 +5,10 @@ pubDatetime: 2025-06-16
 featured: false
 draft: false
 tags:
-  - Photography
-  - Color Grading
-  - Color Theory
-  - Curves
+  - 摄影
+  - 调色
+  - 色彩理论
+  - 曲线
 description: 补色关系、RGB 通道曲线、HSL 与常见调色判断的速查笔记。
 ---
 

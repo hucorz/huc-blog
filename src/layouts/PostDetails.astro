@@ -10,6 +10,7 @@ import ShareLinks from "@/components/ShareLinks.astro";
 import BackButton from "@/components/BackButton.astro";
 import BackToTopButton from "@/components/BackToTopButton.astro";
 import PostCover from "@/components/PostCover.astro";
+import PostToc from "@/components/PostToc.astro";
 import { getPath } from "@/utils/getPath";
 import { slugifyStr } from "@/utils/slugify";
 import IconChevronLeft from "@/assets/icons/IconChevronLeft.svg";
@@ -37,7 +38,10 @@ const {
   hideEditPost,
 } = post.data;
 
-const { Content } = await render(post);
+const { Content, headings } = await render(post);
+const hasToc = headings.some(
+  heading => heading.depth >= 2 && heading.depth <= 3
+);
 
 let ogImageUrl: string | undefined;
 
@@ -89,88 +93,113 @@ const nextPost =
   <BackButton />
   <main
     id="main-content"
-    class:list={["app-layout pb-12", { "mt-8": !SITE.showBackButton }]}
+    class:list={[
+      "w-full px-4 pb-12",
+      { "mt-8": !SITE.showBackButton },
+    ]}
     data-pagefind-body
   >
-    <h1
-      transition:name={slugifyStr(title.replaceAll(".", "-"))}
-      class="inline-block text-2xl font-bold text-accent sm:text-3xl"
-    >
-      {title}
-    </h1>
-    <div class="my-2 flex items-center gap-2">
-      <Datetime {pubDatetime} {modDatetime} {timezone} size="lg" />
-      <span
-        aria-hidden="true"
-        class:list={[
-          "max-sm:hidden",
-          { hidden: !SITE.editPost.enabled || hideEditPost },
-        ]}>|</span
+    <div class="mx-auto max-w-app">
+      <h1
+        transition:name={slugifyStr(title.replaceAll(".", "-"))}
+        class="inline-block text-2xl font-bold text-accent sm:text-3xl"
       >
-      <EditPost {hideEditPost} {post} class="max-sm:hidden" />
-    </div>
-    {
-      coverImage && (
-        <div class="mt-6 overflow-hidden rounded-2xl border border-border/80 bg-muted">
-          <PostCover
-            src={coverImage}
-            alt={`${title} cover image`}
-            loading="eager"
-            sizes="(min-width: 1024px) 768px, 100vw"
-            class="aspect-[16/9] w-full object-cover"
-          />
-        </div>
-      )
-    }
-    <article
-      id="article"
-      class="app-prose mt-8 w-full max-w-app prose-pre:bg-(--shiki-light-bg) dark:prose-pre:bg-(--shiki-dark-bg)"
-    >
-      <Content />
-    </article>
-
-    <hr class="my-8 border-dashed" />
-
-    <EditPost class="sm:hidden" {hideEditPost} {post} />
-
-    <ul class="mt-4 mb-8 flex flex-wrap gap-4 sm:my-8">
-      {tags.map(tag => <Tag tag={slugifyStr(tag)} tagName={tag} size="sm" />)}
-    </ul>
-
-    <BackToTopButton />
-
-    <ShareLinks />
-
-    <hr class="my-6 border-dashed" />
-
-    <!-- Previous/Next Post Buttons -->
-    <div data-pagefind-ignore class="grid grid-cols-1 gap-6 sm:grid-cols-2">
+        {title}
+      </h1>
+      <div class="my-2 flex items-center gap-2">
+        <Datetime {pubDatetime} {modDatetime} {timezone} size="lg" />
+        <span
+          aria-hidden="true"
+          class:list={[
+            "max-sm:hidden",
+            { hidden: !SITE.editPost.enabled || hideEditPost },
+          ]}>|</span
+        >
+        <EditPost {hideEditPost} {post} class="max-sm:hidden" />
+      </div>
       {
-        prevPost && (
-          <a
-            href={getPath(prevPost.id, prevPost.filePath)}
-            class="flex w-full gap-1 hover:opacity-75"
-          >
-            <IconChevronLeft class="inline-block flex-none rtl:rotate-180" />
-            <div>
-              <span>Previous Post</span>
-              <div class="text-sm text-accent/85">{prevPost.title}</div>
-            </div>
-          </a>
+        coverImage && (
+          <div class="mt-6 overflow-hidden rounded-2xl border border-border/80 bg-muted">
+            <PostCover
+              src={coverImage}
+              alt={`${title} cover image`}
+              loading="eager"
+              sizes="(min-width: 1024px) 768px, 100vw"
+              class="aspect-[16/9] w-full object-cover"
+            />
+          </div>
         )
       }
+    </div>
+
+    <div class="mx-auto mt-8 max-w-[calc(48rem+14rem+2.5rem)] xl:flex xl:items-start xl:gap-10">
+      <div class="min-w-0 xl:w-[48rem] xl:flex-none">
+        {
+          hasToc && (
+            <PostToc headings={headings} mobile class="mb-6 lg:hidden" />
+          )
+        }
+
+        <article
+          id="article"
+          class="app-prose w-full max-w-app prose-pre:bg-(--shiki-light-bg) dark:prose-pre:bg-(--shiki-dark-bg)"
+        >
+          <Content />
+        </article>
+
+        <hr class="my-8 border-dashed" />
+
+        <EditPost class="sm:hidden" {hideEditPost} {post} />
+
+        <ul class="mt-4 mb-8 flex flex-wrap gap-4 sm:my-8">
+          {tags.map(tag => <Tag tag={slugifyStr(tag)} tagName={tag} size="sm" />)}
+        </ul>
+
+        <BackToTopButton />
+
+        <ShareLinks />
+
+        <hr class="my-6 border-dashed" />
+
+        <!-- Previous/Next Post Buttons -->
+        <div data-pagefind-ignore class="grid grid-cols-1 gap-6 sm:grid-cols-2">
+          {
+            prevPost && (
+              <a
+                href={getPath(prevPost.id, prevPost.filePath)}
+                class="flex w-full gap-1 hover:opacity-75"
+              >
+                <IconChevronLeft class="inline-block flex-none rtl:rotate-180" />
+                <div>
+                  <span>Previous Post</span>
+                  <div class="text-sm text-accent/85">{prevPost.title}</div>
+                </div>
+              </a>
+            )
+          }
+          {
+            nextPost && (
+              <a
+                href={getPath(nextPost.id, nextPost.filePath)}
+                class="flex w-full justify-end gap-1 text-end hover:opacity-75 sm:col-start-2"
+              >
+                <div>
+                  <span>Next Post</span>
+                  <div class="text-sm text-accent/85">{nextPost.title}</div>
+                </div>
+                <IconChevronRight class="inline-block flex-none rtl:rotate-180" />
+              </a>
+            )
+          }
+        </div>
+      </div>
+
       {
-        nextPost && (
-          <a
-            href={getPath(nextPost.id, nextPost.filePath)}
-            class="flex w-full justify-end gap-1 text-end hover:opacity-75 sm:col-start-2"
-          >
-            <div>
-              <span>Next Post</span>
-              <div class="text-sm text-accent/85">{nextPost.title}</div>
-            </div>
-            <IconChevronRight class="inline-block flex-none rtl:rotate-180" />
-          </a>
+        hasToc && (
+          <PostToc
+            headings={headings}
+            class="hidden xl:block xl:w-56 xl:flex-none xl:self-stretch"
+          />
         )
       }
     </div>
