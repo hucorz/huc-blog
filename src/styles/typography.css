@@ -74,6 +74,23 @@
       @apply flex-[1_0_100%] bg-inherit p-0;
     }
 
+    .katex,
+    .katex-display {
+      @apply text-foreground;
+    }
+
+    .katex-display {
+      @apply overflow-x-auto py-2;
+    }
+
+    .equation-anchor {
+      @apply block scroll-mt-24;
+    }
+
+    .equation-reference {
+      @apply whitespace-nowrap;
+    }
+
     blockquote {
       @apply border-s-accent/80 wrap-break-word opacity-80;
     }

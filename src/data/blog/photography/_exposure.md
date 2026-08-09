@@ -1,7 +1,7 @@
 ---
 title: 摄影基础
 author: Huc
-pubDatetime: 2025-05-29
+pubDatetime: 2026-05-29
 featured: false
 draft: true
 tags:
@@ -22,8 +22,8 @@ description:
   - t：时间，单位是秒，表示快门打开的时间。
 - 曝光值：比曝光量更好用的单位
   - EV 值 = 快门 EV 修正值 + 光圈 EV 修正值 - ISO EV 修正值
-  
-![ev 修正值](@/assets/images/blog/photography/ev.png)
+  @/assets/images/blog/
+![ev 修正值](photography/ev.png)
 
 曝光补偿：
 - 在相机纯手动模式中，曝光补偿无效，因为用户直接控制快门速度、光圈和ISO。

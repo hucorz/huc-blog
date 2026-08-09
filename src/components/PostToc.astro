@@ -1,4 +1,6 @@
 ---
+import katex from "katex";
+
 type Heading = {
   depth: number;
   slug: string;
@@ -17,6 +19,37 @@ const tocHeadings = headings.filter(
   heading => heading.depth >= 2 && heading.depth <= 3
 );
 
+const escapeHtml = (value: string) =>
+  value.replace(
+    /[&<>"']/g,
+    character =>
+      ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;",
+      })[character] ?? character
+  );
+
+const renderTocLabel = (text: string) => {
+  let html = "";
+  let cursor = 0;
+
+  for (const match of text.matchAll(/\$([^$\n]+)\$/g)) {
+    const index = match.index ?? 0;
+    html += escapeHtml(text.slice(cursor, index));
+    html += katex.renderToString(match[1], {
+      displayMode: false,
+      throwOnError: false,
+      strict: "ignore",
+    });
+    cursor = index + match[0].length;
+  }
+
+  return html + escapeHtml(text.slice(cursor));
+};
+
 if (tocHeadings.length === 0) {
   return null;
 }
@@ -29,7 +62,7 @@ if (tocHeadings.length === 0) {
       data-toc-root
       style="--toc-progress: 0%;"
     >
-      <summary class="flex cursor-pointer list-none items-center justify-between gap-3 py-2 text-sm font-medium">
+      <summary class="flex cursor-pointer list-none items-center justify-between gap-3 py-2 text-xs font-medium">
         <span class="text-accent">目录</span>
         <span
           data-toc-progress-label
@@ -39,7 +72,7 @@ if (tocHeadings.length === 0) {
         </span>
       </summary>
       <nav aria-label="Table of contents" class="pb-2">
-        <ol class="space-y-2 text-sm">
+        <ol class="space-y-2 text-xs">
           {tocHeadings.map(heading => (
             <li class:list={{ "ms-4": heading.depth === 3 }}>
               <a
@@ -48,8 +81,11 @@ if (tocHeadings.length === 0) {
                 data-toc-link
                 data-state="idle"
               >
-                <span aria-hidden="true" class="toc-marker"></span>
-                <span class="toc-label">{heading.text}</span>
+                <span aria-hidden="true" class="toc-marker" />
+                <span
+                  class="toc-label"
+                  set:html={renderTocLabel(heading.text)}
+                />
               </a>
             </li>
           ))}
@@ -59,12 +95,8 @@ if (tocHeadings.length === 0) {
   ) : (
     <aside class:list={className}>
       <div class="sticky top-16">
-        <div
-          class="toc-shell ps-4"
-          data-toc-root
-          style="--toc-progress: 0%;"
-        >
-          <p class="mb-3 flex items-center justify-between gap-3 text-sm font-medium">
+        <div class="toc-shell ps-4" data-toc-root style="--toc-progress: 0%;">
+          <p class="mb-3 flex items-center justify-between gap-3 text-xs font-medium">
             <span class="text-accent">目录</span>
             <span
               data-toc-progress-label
@@ -74,7 +106,7 @@ if (tocHeadings.length === 0) {
             </span>
           </p>
           <nav aria-label="Table of contents">
-            <ol class="space-y-2 text-sm">
+            <ol class="space-y-2 text-xs">
               {tocHeadings.map(heading => (
                 <li class:list={{ "ms-4": heading.depth === 3 }}>
                   <a
@@ -83,8 +115,11 @@ if (tocHeadings.length === 0) {
                     data-toc-link
                     data-state="idle"
                   >
-                    <span aria-hidden="true" class="toc-marker"></span>
-                    <span class="toc-label">{heading.text}</span>
+                    <span aria-hidden="true" class="toc-marker" />
+                    <span
+                      class="toc-label"
+                      set:html={renderTocLabel(heading.text)}
+                    />
                   </a>
                 </li>
               ))}
@@ -156,6 +191,10 @@ if (tocHeadings.length === 0) {
 
   .toc-label {
     min-width: 0;
+  }
+
+  .toc-label :global(.katex) {
+    font-size: 1em;
   }
 
   .toc-link[data-state="done"] {
@@ -231,8 +270,9 @@ if (tocHeadings.length === 0) {
 
       const offset = Math.max(96, Math.min(window.innerHeight * 0.18, 160));
       let activeIndex =
-        entries.findIndex(({ heading }) => heading.getBoundingClientRect().top > offset) -
-        1;
+        entries.findIndex(
+          ({ heading }) => heading.getBoundingClientRect().top > offset
+        ) - 1;
 
       if (activeIndex < 0) activeIndex = 0;
       if (activeIndex >= entries.length) activeIndex = entries.length - 1;
@@ -249,7 +289,11 @@ if (tocHeadings.length === 0) {
 
       entries.forEach(({ links }, index) => {
         const state =
-          index < activeIndex ? "done" : index === activeIndex ? "active" : "idle";
+          index < activeIndex
+            ? "done"
+            : index === activeIndex
+              ? "active"
+              : "idle";
 
         for (const link of links) {
           link.dataset.state = state;
