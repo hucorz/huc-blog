@@ -4,7 +4,7 @@ author: Huc
 pubDatetime: 2026-06-19
 modDatetime: 2026-06-20
 featured: false
-draft: false
+draft: true
 tags:
   - AIGC
   - VAE

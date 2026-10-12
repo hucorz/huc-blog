@@ -1,10 +1,10 @@
 ---
-title: 把 GAN 看成参数空间中的扩散 ODE
+title: 生成扩散模型漫谈 19-20：把 GAN 看成参数空间中的扩散 ODE
 author: Huc
 pubDatetime: 2026-08-09
 modDatetime: 2026-08-09
 featured: false
-draft: false
+draft: true
 tags:
   - AIGC
   - GAN

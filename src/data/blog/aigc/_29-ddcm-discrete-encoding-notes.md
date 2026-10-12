@@ -1,10 +1,10 @@
 ---
-title: DDCM：把 DDPM 变成离散编码器
+title: 生成扩散模型漫谈 29：DDCM：把 DDPM 变成离散编码器
 author: Huc
 pubDatetime: 2026-08-09
 modDatetime: 2026-08-09
 featured: false
-draft: false
+draft: true
 tags:
   - AIGC
   - Diffusion

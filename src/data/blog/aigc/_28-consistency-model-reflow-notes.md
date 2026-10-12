@@ -1,10 +1,10 @@
 ---
-title: 一致性模型：从 ReFlow 的逐点回归出发
+title: 生成扩散模型漫谈 28：一致性模型：从 ReFlow 的逐点回归出发
 author: Huc
 pubDatetime: 2026-08-09
 modDatetime: 2026-08-09
 featured: false
-draft: false
+draft: true
 tags:
   - AIGC
   - Diffusion

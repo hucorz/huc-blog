@@ -1,10 +1,10 @@
 ---
-title: MeanFlow：直接学习区间平均速度
+title: 生成扩散模型漫谈 30：MeanFlow：直接学习区间平均速度
 author: Huc
 pubDatetime: 2026-08-09
 modDatetime: 2026-08-09
 featured: false
-draft: false
+draft: true
 tags:
   - AIGC
   - Diffusion

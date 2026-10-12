@@ -1,10 +1,10 @@
 ---
-title: 扩散模型的反向方差估计
+title: 生成扩散模型漫谈 07-08：扩散模型的反向方差估计
 author: Huc
 pubDatetime: 2026-08-09
 modDatetime: 2026-08-09
 featured: false
-draft: false
+draft: true
 tags:
   - AIGC
   - Diffusion

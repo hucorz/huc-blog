@@ -1,10 +1,10 @@
 ---
-title: 从连续性方程直接构造扩散 ODE
+title: 生成扩散模型漫谈 12：从连续性方程直接构造扩散 ODE
 author: Huc
 pubDatetime: 2026-08-09
 modDatetime: 2026-08-09
 featured: false
-draft: false
+draft: true
 tags:
   - AIGC
   - Diffusion

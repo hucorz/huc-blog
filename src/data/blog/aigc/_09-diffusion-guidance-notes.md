@@ -1,10 +1,10 @@
 ---
-title: 扩散模型的条件引导
+title: 生成扩散模型漫谈 09：扩散模型的条件引导
 author: Huc
 pubDatetime: 2026-08-09
 modDatetime: 2026-08-09
 featured: false
-draft: false
+draft: true
 tags:
   - AIGC
   - Diffusion

@@ -1,10 +1,10 @@
 ---
-title: 得分扩散的 SDE 与概率流 ODE
+title: 生成扩散模型漫谈 05-06：得分扩散的 SDE 与概率流 ODE
 author: Huc
 pubDatetime: 2026-08-09
 modDatetime: 2026-08-09
 featured: false
-draft: false
+draft: true
 tags:
   - AIGC
   - Diffusion

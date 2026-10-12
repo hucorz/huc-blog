@@ -1,10 +1,10 @@
 ---
-title: Score Matching 如何控制 Wasserstein 距离
+title: 生成扩散模型漫谈 16：Score Matching 如何控制 Wasserstein 距离
 author: Huc
 pubDatetime: 2026-08-09
 modDatetime: 2026-08-09
 featured: false
-draft: false
+draft: true
 tags:
   - AIGC
   - Diffusion

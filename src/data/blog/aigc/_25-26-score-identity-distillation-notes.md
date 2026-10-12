@@ -1,10 +1,10 @@
 ---
-title: SiD：用得分恒等式蒸馏单步生成器
+title: 生成扩散模型漫谈 25-26：SiD：用得分恒等式蒸馏单步生成器
 author: Huc
 pubDatetime: 2026-08-09
 modDatetime: 2026-08-09
 featured: false
-draft: false
+draft: true
 tags:
   - AIGC
   - Diffusion

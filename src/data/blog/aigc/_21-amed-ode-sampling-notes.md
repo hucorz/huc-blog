@@ -1,10 +1,10 @@
 ---
-title: AMED：用平均方向加速 ODE 采样
+title: 生成扩散模型漫谈 21：AMED：用平均方向加速 ODE 采样
 author: Huc
 pubDatetime: 2026-08-09
 modDatetime: 2026-08-09
 featured: false
-draft: false
+draft: true
 tags:
   - AIGC
   - Diffusion

@@ -1,5 +1,5 @@
 ---
-title: DDPM：从逐步加噪到预测噪声
+title: 生成扩散模型漫谈 01：DDPM：从逐步加噪到预测噪声
 author: Huc
 pubDatetime: 2026-08-09
 modDatetime: 2026-08-09

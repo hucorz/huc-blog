@@ -1,10 +1,10 @@
 ---
-title: 从 VAE 与贝叶斯推导 DDPM 和 DDIM
+title: 生成扩散模型漫谈 02-04：从 VAE 与贝叶斯推导 DDPM 和 DDIM
 author: Huc
 pubDatetime: 2026-08-09
 modDatetime: 2026-08-09
 featured: false
-draft: false
+draft: true
 tags:
   - AIGC
   - Diffusion

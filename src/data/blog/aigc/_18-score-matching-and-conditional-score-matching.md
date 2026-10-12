@@ -1,10 +1,10 @@
 ---
-title: Score Matching 与条件目标为何等价
+title: 生成扩散模型漫谈 18：Score Matching 与条件目标为何等价
 author: Huc
 pubDatetime: 2026-08-09
 modDatetime: 2026-08-09
 featured: false
-draft: false
+draft: true
 tags:
   - AIGC
   - Diffusion

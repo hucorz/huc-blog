@@ -1,10 +1,10 @@
 ---
-title: 统一扩散模型的自由与约束
+title: 生成扩散模型漫谈 10：统一扩散模型的自由与约束
 author: Huc
 pubDatetime: 2026-08-09
 modDatetime: 2026-08-09
 featured: false
-draft: false
+draft: true
 tags:
   - AIGC
   - Diffusion

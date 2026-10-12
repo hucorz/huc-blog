@@ -1,10 +1,10 @@
 ---
-title: 高分辨率扩散：信噪比对齐与免训练放大
+title: 生成扩散模型漫谈 22-23：高分辨率扩散：信噪比对齐与免训练放大
 author: Huc
 pubDatetime: 2026-08-09
 modDatetime: 2026-08-09
 featured: false
-draft: false
+draft: true
 tags:
   - AIGC
   - Diffusion

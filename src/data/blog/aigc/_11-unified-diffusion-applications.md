@@ -1,10 +1,10 @@
 ---
-title: 统一扩散框架的几种落地方式
+title: 生成扩散模型漫谈 11：统一扩散框架的几种落地方式
 author: Huc
 pubDatetime: 2026-08-09
 modDatetime: 2026-08-09
 featured: false
-draft: false
+draft: true
 tags:
   - AIGC
   - Diffusion

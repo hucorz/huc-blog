@@ -1,10 +1,10 @@
 ---
-title: 从格林函数到 Rectified Flow
+title: 生成扩散模型漫谈 14-15-17：从格林函数到 Rectified Flow
 author: Huc
 pubDatetime: 2026-08-09
 modDatetime: 2026-08-09
 featured: false
-draft: false
+draft: true
 tags:
   - AIGC
   - Diffusion
